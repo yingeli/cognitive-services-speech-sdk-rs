@@ -67,15 +67,15 @@ pub fn translation_recognizer_from_audio_cfg(audio_config: AudioConfig) -> Trans
     )
     .unwrap();
     translation_config
-        .add_target_language("en".to_string())
+        .add_target_language("en")
         .unwrap();
     translation_config
-        .set_voice_name("personal-voice".to_string())
+        .set_voice_name("personal-voice")
         .unwrap();
     translation_config
         .set_property(
             PropertyId::SpeechSegmentationStrategy,
-            "Semantic".to_string(),
+            "Semantic",
         )
         .unwrap();
 

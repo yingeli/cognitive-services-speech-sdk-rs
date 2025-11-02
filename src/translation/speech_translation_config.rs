@@ -220,7 +220,10 @@ impl SpeechTranslationConfig {
 
     /// Sets proxy configuration
     /// Note: Proxy functionality is not available on macOS. This function will have no effect on this platform.
-    pub fn set_proxy(&mut self, hostname: String, port: u64) -> Result<()> {
+    pub fn set_proxy<S>(&mut self, hostname: S, port: u64) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.set_property(PropertyId::SpeechServiceConnectionProxyHostName, hostname)?;
         self.set_property(
             PropertyId::SpeechServiceConnectionProxyPort,
@@ -230,24 +233,30 @@ impl SpeechTranslationConfig {
 
     /// Sets proxy configuration with username and password
     ///  Note: Proxy functionality is not available on macOS. This function will have no effect on this platform.
-    pub fn set_proxy_with_usrname_and_pwd(
+    pub fn set_proxy_with_usrname_and_pwd<S>(
         &mut self,
-        hostname: String,
+        hostname: S,
         port: u64,
-        username: String,
-        password: String,
-    ) -> Result<()> {
+        username: S,
+        password: S,
+    ) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.set_proxy(hostname, port)?;
         self.set_property(PropertyId::SpeechServiceConnectionProxyUserName, username)?;
         self.set_property(PropertyId::SpeechServiceConnectionProxyPassword, password)
     }
 
-    pub fn set_service_property(
+    pub fn set_service_property<S>(
         &mut self,
-        name: String,
-        value: String,
+        name: S,
+        value: S,
         channel: ServicePropertyChannel,
-    ) -> Result<()> {
+    ) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         unsafe {
             let c_name = CString::new(name)?;
             let c_value = CString::new(value)?;
@@ -287,7 +296,7 @@ impl SpeechTranslationConfig {
     pub fn enable_audio_logging(&mut self) -> Result<()> {
         self.set_property(
             PropertyId::SpeechServiceConnectionEnableAudioLogging,
-            "true".into(),
+            "true",
         )
     }
 
@@ -295,19 +304,19 @@ impl SpeechTranslationConfig {
     pub fn request_word_level_timestamps(&mut self) -> Result<()> {
         self.set_property(
             PropertyId::SpeechServiceResponseRequestWordLevelTimestamps,
-            "true".into(),
+            "true",
         )
     }
 
     /// Enables dictation mode. Only supported in speech translation continuous recognition.
     pub fn enable_dictation(&mut self) -> Result<()> {
-        self.set_property(
-            PropertyId::SpeechServiceConnectionRecoMode,
-            "DICTATION".into(),
-        )
+        self.set_property(PropertyId::SpeechServiceConnectionRecoMode, "DICTATION")
     }
 
-    pub fn set_property(&mut self, id: PropertyId, value: String) -> Result<()> {
+    pub fn set_property<S>(&mut self, id: PropertyId, value: S) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.properties.set_property(id, value)
     }
 
@@ -315,12 +324,19 @@ impl SpeechTranslationConfig {
         self.properties.get_property(id, "")
     }
 
-    pub fn set_property_by_string(&mut self, name: String, value: String) -> Result<()> {
+    pub fn set_property_by_string<S>(&mut self, name: S, value: S) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.properties.set_property_by_string(name, value)
     }
 
-    pub fn get_property_by_string(&self, name: String) -> Result<String> {
-        self.properties.get_property_by_string(name, "".into())
+    pub fn get_property_by_string<S>(&self, name: S) -> Result<String>
+    where
+        S: Into<Vec<u8>>,
+    {
+        self.properties
+            .get_property_by_string(name.into(), "".into())
     }
 
     /// Subscription key that is used to create Speech Translation Recognizer.
@@ -345,7 +361,10 @@ impl SpeechTranslationConfig {
     /// recognizers that have already been created.
     /// For recognizers that have been created before, you need to set authorization token of the corresponding recognizer
     /// to refresh the token. Otherwise, the recognizers will encounter errors during recognition.
-    pub fn set_auth_token(&mut self, auth_token: String) -> Result<()> {
+    pub fn set_auth_token<S>(&mut self, auth_token: S) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.set_property(PropertyId::SpeechServiceAuthorizationToken, auth_token)
     }
 
@@ -355,7 +374,10 @@ impl SpeechTranslationConfig {
         self.get_property(PropertyId::SpeechServiceConnectionRecoLanguage)
     }
 
-    pub fn set_speech_recognition_language(&mut self, reco_lang: String) -> Result<()> {
+    pub fn set_speech_recognition_language<S>(&mut self, reco_lang: S) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.set_property(PropertyId::SpeechServiceConnectionRecoLanguage, reco_lang)
     }
 
@@ -373,11 +395,11 @@ impl SpeechTranslationConfig {
         match output_format {
             OutputFormat::Simple => self.set_property(
                 PropertyId::SpeechServiceResponseRequestDetailedResultTrueFalse,
-                "false".into(),
+                "false",
             ),
             OutputFormat::Detailed => self.set_property(
                 PropertyId::SpeechServiceResponseRequestDetailedResultTrueFalse,
-                "true".into(),
+                "true",
             ),
         }
     }
@@ -386,7 +408,10 @@ impl SpeechTranslationConfig {
         self.get_property(PropertyId::SpeechServiceConnectionEndpointId)
     }
 
-    pub fn set_endpoint_id(&mut self, endpoint_id: String) -> Result<()> {
+    pub fn set_endpoint_id<S>(&mut self, endpoint_id: S) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.set_property(PropertyId::SpeechServiceConnectionEndpointId, endpoint_id)
     }
 
@@ -394,10 +419,13 @@ impl SpeechTranslationConfig {
         self.get_property(PropertyId::SpeechServiceConnectionSynthLanguage)
     }
 
-    pub fn set_get_speech_synthesis_language(
+    pub fn set_get_speech_synthesis_language<S>(
         &mut self,
-        speech_synthesis_language: String,
-    ) -> Result<()> {
+        speech_synthesis_language: S,
+    ) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.set_property(
             PropertyId::SpeechServiceConnectionSynthLanguage,
             speech_synthesis_language,
@@ -408,10 +436,13 @@ impl SpeechTranslationConfig {
         self.get_property(PropertyId::SpeechServiceConnectionSynthVoice)
     }
 
-    pub fn set_get_speech_synthesis_voice_name(
+    pub fn set_get_speech_synthesis_voice_name<S>(
         &mut self,
-        speech_synthesis_voice_name: String,
-    ) -> Result<()> {
+        speech_synthesis_voice_name: S,
+    ) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.set_property(
             PropertyId::SpeechServiceConnectionSynthVoice,
             speech_synthesis_voice_name,
@@ -422,24 +453,33 @@ impl SpeechTranslationConfig {
         self.get_property(PropertyId::SpeechServiceConnectionSynthOutputFormat)
     }
 
-    pub fn set_get_speech_synthesis_output_format(
+    pub fn set_get_speech_synthesis_output_format<S>(
         &mut self,
-        speech_synthesis_output_format: String,
-    ) -> Result<()> {
+        speech_synthesis_output_format: S,
+    ) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.set_property(
             PropertyId::SpeechServiceConnectionSynthOutputFormat,
             speech_synthesis_output_format,
         )
     }
 
-    pub fn set_voice_name(&mut self, voice_name: String) -> Result<()> {
+    pub fn set_voice_name<S>(&mut self, voice_name: S) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         self.set_property(
             PropertyId::SpeechServiceConnectionTranslationVoice,
             voice_name,
         )
     }
 
-    pub fn add_target_language(&mut self, target_lang: String) -> Result<()> {
+    pub fn add_target_language<S>(&mut self, target_lang: S) -> Result<()>
+    where
+        S: Into<Vec<u8>>,
+    {
         unsafe {
             let c_target_lang = CString::new(target_lang)?;
             let ret = speech_translation_config_add_target_language(
