@@ -359,6 +359,44 @@ pub enum PropertyId {
     /// https://aka.ms/csspeech/timeouts.
     SpeechSegmentationSilenceTimeoutMs = 9002,
 
+    /// <summary>
+    /// The maximum length of a spoken phrase when using the "Time" segmentation strategy.
+    /// The value of <see also cref="Speech_SegmentationSilenceTimeoutMs"/> must be set in order to use this setting.
+    /// As the length of a spoken phrase approaches this value, the <see also cref="Speech_SegmentationSilenceTimeoutMs"/> will begin being reduced until either the phrase silence timeout is hit or the phrase reaches the maximum length.
+    /// The value must be in the range **[20000, 70000]** milliseconds.
+    /// </summary>
+    SpeechSegmentationMaximumTimeMs = 9003,
+
+    /// <summary>
+    /// The strategy used to determine when a spoken phrase has ended and a final Recognized result should be generated.
+    /// Allowed values are "Default", "Time", and "Semantic".
+    /// </summary>
+    /// <remarks>
+    /// Valid values are:
+    /// <list type="bullet">
+    /// <item>
+    /// <term>Default</term>
+    /// <description>Use the default strategy and settings as determined by the Speech Service. Use in most situations.</description>
+    /// </item>
+    /// <item>
+    /// <term>Time</term>
+    /// <description>Uses a time based strategy where the amount of silence between speech is used to determine when to generate a final result.</description>
+    /// </item>
+    /// <item>
+    /// <term>Semantic</term>
+    /// <description>Uses an AI model to deterine the end of a spoken phrase based on the content of the phrase.</description>
+    /// </item>
+    /// </list>
+    /// <para>
+    /// When using the time strategy, the <see cref="Speech_SegmentationSilenceTimeoutMs"/> property can be used to adjust the amount of silence needed to determine the end of a spoken phrase,
+    /// and the <see cref="Speech_SegmentationMaximumTimeMs"/> property can be used to adjust the maximum length of a spoken phrase.
+    /// </para>
+    /// <para>
+    /// The semantic strategy has no control properties available.
+    /// </para>
+    /// </remarks>
+    SpeechSegmentationStrategy = 9004,    
+
     /// ConversationApplicationID is the identifier used to connect to the backend service.
     ConversationApplicationID = 10000,
 
@@ -593,6 +631,8 @@ impl PropertyId {
 
             PropertyId::SpeechLogFilename => 9001,
             PropertyId::SpeechSegmentationSilenceTimeoutMs => 9002,
+            PropertyId::SpeechSegmentationMaximumTimeMs => 9003,
+            PropertyId::SpeechSegmentationStrategy => 9004,
 
             PropertyId::ConversationApplicationID => 10000,
             PropertyId::ConversationDialogType => 10001,

@@ -11,6 +11,7 @@ pub mod dialog;
 pub mod error;
 pub mod ffi;
 pub mod speech;
+pub mod translation;
 
 #[cfg(test)]
 mod tests {
